@@ -45,7 +45,7 @@ public class FilmController {
 
         //UPDATE data
         @PutMapping("/{filmId}")
-        public void updateFilm(@PathVariable("filmId") Long id, @RequestParam(required = false) String title, @RequestParam(required = false) String image, @RequestParam(required = false) int duration){
+        public void updateFilm(@PathVariable("filmId") Long id, @RequestParam(required = false) String title, @RequestParam(required = false) String image, @RequestParam(required = false) Integer duration){
             filmService.updateFilm(id, title, image, duration);
         }
 }

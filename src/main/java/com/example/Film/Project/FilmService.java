@@ -50,7 +50,7 @@ public class FilmService {
         if (!image.isEmpty() && !Objects.equals(film.getImage(), image))
             film.setImage(image);
 
-        if (duration > 30 && !Objects.equals(film.getDuration(), duration))
+        if (duration != null && duration > 30 && !Objects.equals(film.getDuration(), duration))
             film.setDuration(duration);
     }
 
