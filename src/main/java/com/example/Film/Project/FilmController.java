@@ -47,8 +47,12 @@ public class FilmController {
 
     //CREATE data
     @PostMapping("/addMovie")
-    public ResponseEntity<Film> addFilm(@RequestBody Film film){
+    public ResponseEntity<?> addFilm(@RequestBody Film film){
         Film savedFilm = filmService.addFilm(film);
+
+        if(savedFilm == null)
+            return ResponseEntity.status(HttpStatus.CREATED).body("Movie attributes can't be null");
+
         return ResponseEntity.status(HttpStatus.CREATED).body(savedFilm);
     }
 
@@ -66,11 +70,11 @@ public class FilmController {
 
     //UPDATE data
     @PutMapping("/updateMovie/{filmId}")
-    public ResponseEntity<?> updateFilm(@PathVariable("filmId") Long id, @RequestParam(required = false) String title, @RequestParam(required = false) String image, @RequestParam(required = false) Integer duration, @RequestParam(required = false) String genre, @RequestParam(required = false) String description){
-        Film film = filmService.updateFilm(id, title, image, duration, genre, description);
+    public ResponseEntity<?> updateFilm(@PathVariable("filmId") Long id, @RequestBody Film film){
+        Film updateFilm = filmService.updateFilm(id, film);
 
-        if(film != null)
-            return ResponseEntity.ok(film);
+        if(updateFilm != null)
+            return ResponseEntity.ok(updateFilm);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Movie with ID " + id + " not found");
     }

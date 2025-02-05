@@ -29,6 +29,9 @@ public class FilmService {
         if(filmOptional.isEmpty())
             return filmRepository.save(film);
 
+        if (film.getTitle() == null || film.getImage() == null || film.getDuration() == null || film.getTitle() == null || film.getGenre() == null || film.getDescription() == null)
+            return null;
+
         return filmOptional.orElseThrow(() -> new RuntimeException("Film already exists!"));
     }
 
@@ -60,26 +63,33 @@ public class FilmService {
 
     //UPDATE data
     @Transactional
-    public Film updateFilm(Long id, String title, String image, Integer duration, String genre, String description) {
+    public Film updateFilm(Long id, Film film) {
 
-        Film film = filmRepository.findById(id).orElseThrow(() -> new IllegalStateException("film id " + id + " does not exist"));
+//        if(film == null)
+//            return null;
 
-        if (title != null&& !Objects.equals(film.getTitle(), title))
-            film.setTitle(title);
+        Film updateFilm = filmRepository.findById(id).orElseThrow(() -> new IllegalStateException("film id " + id + " does not exist"));
 
-        if (image != null && !Objects.equals(film.getImage(), image))
-            film.setImage(image);
+        if (film.getTitle() != null && !Objects.equals(film.getTitle(), updateFilm.getTitle()))
+            updateFilm.setTitle(film.getTitle());
 
-        if (duration != null && duration > 30 && !Objects.equals(film.getDuration(), duration))
-            film.setDuration(duration);
+        if (film.getImage() != null && !Objects.equals(film.getImage(), updateFilm.getImage()))
+            updateFilm.setImage(film.getImage());
 
-        if (genre != null && !Objects.equals(film.getGenre(), genre))
-            film.setGenre(genre);
+        if (film.getDuration() != null && film.getDuration() != 0 && film.getDuration() > 30 && !Objects.equals(film.getDuration(), updateFilm.getDuration()))
+            updateFilm.setDuration(film.getDuration());
 
-        if (description != null && !Objects.equals(film.getDescription(), description))
-            film.setDescription(description);
+        if (film.getRating() != null && film.getRating() != 0 && !Objects.equals(film.getRating(), updateFilm.getRating()))
+            updateFilm.setRating(film.getRating());
 
-        return film;
+        if (film.getGenre() != null && !Objects.equals(film.getGenre(), updateFilm.getGenre())) {
+            updateFilm.setGenre(film.getGenre());
+        }
+
+        if (film.getDescription() != null && !Objects.equals(film.getDescription(), updateFilm.getDescription()))
+            updateFilm.setDescription(film.getDescription());
+
+        return updateFilm;
     }
 
     //DELETE data
