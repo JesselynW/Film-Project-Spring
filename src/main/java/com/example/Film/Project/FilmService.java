@@ -1,8 +1,10 @@
 package com.example.Film.Project;
 
 import jakarta.transaction.Transactional;
+import org.apache.coyote.Response;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
@@ -58,7 +60,7 @@ public class FilmService {
 
     //UPDATE data
     @Transactional
-    public void updateFilm(Long id, String title, String image, Integer duration, String genre, String description) {
+    public Film updateFilm(Long id, String title, String image, Integer duration, String genre, String description) {
 
         Film film = filmRepository.findById(id).orElseThrow(() -> new IllegalStateException("film id " + id + " does not exist"));
 
@@ -76,13 +78,18 @@ public class FilmService {
 
         if (description != null && !Objects.equals(film.getDescription(), description))
             film.setDescription(description);
+
+        return film;
     }
 
     //DELETE data
 //    @Caching(evict = {@CacheEvict(value = "films", allentries = true), @CacheEvict(value = "films", key = "#id")})
-    public void deleteFilm(Long id){
+    public Boolean deleteFilm(Long id){
         if(filmRepository.existsById(id)){
             filmRepository.deleteById(id);
+            return true;
         }
+
+        return filmRepository.existsById(id);
     }
 }
