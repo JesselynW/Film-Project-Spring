@@ -26,6 +26,26 @@ public class Film {
     private int rating;
     @Column(name = "duration")
     private int duration;
+    @Column(name = "genre")
+    private String genre;
+    @Column(name = "description")
+    private String description;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
 
     public Film(String title, String image, int rating, int duration) {
         this.title = title;

@@ -1,8 +1,11 @@
 package com.example.Film.Project;
 
 import jakarta.transaction.Transactional;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -28,33 +31,55 @@ public class FilmService {
     }
 
     //READ all data
+//    @Cacheable(value = "films")
     public List<Film> getAllFilms(){
         return filmRepository.findAll();
     }
 
-    //READ data
+    //READ by id
     public Film getFilm(Long id){
         Optional<Film> filmOptional = filmRepository.findById(id);
-        return filmOptional.get();
+
+        if(filmOptional.isPresent())
+            return filmOptional.get();
+
+        return null;
+    }
+
+    //READ by genre
+    public List<Film> getFilmByGenre(String genre){
+        if (genre.isEmpty())
+            System.out.println("Please input genre");
+
+        Optional<List<Film>> optionalFilms = filmRepository.findFilmByGenre(genre);
+
+        return optionalFilms.orElse(Collections.emptyList());
     }
 
     //UPDATE data
     @Transactional
-    public void updateFilm(Long id, String title, String image, Integer duration) {
+    public void updateFilm(Long id, String title, String image, Integer duration, String genre, String description) {
 
         Film film = filmRepository.findById(id).orElseThrow(() -> new IllegalStateException("film id " + id + " does not exist"));
 
-        if (!title.isEmpty() && !Objects.equals(film.getTitle(), title))
+        if (title != null&& !Objects.equals(film.getTitle(), title))
             film.setTitle(title);
 
-        if (!image.isEmpty() && !Objects.equals(film.getImage(), image))
+        if (image != null && !Objects.equals(film.getImage(), image))
             film.setImage(image);
 
         if (duration != null && duration > 30 && !Objects.equals(film.getDuration(), duration))
             film.setDuration(duration);
+
+        if (genre != null && !Objects.equals(film.getGenre(), genre))
+            film.setGenre(genre);
+
+        if (description != null && !Objects.equals(film.getDescription(), description))
+            film.setDescription(description);
     }
 
     //DELETE data
+//    @Caching(evict = {@CacheEvict(value = "films", allentries = true), @CacheEvict(value = "films", key = "#id")})
     public void deleteFilm(Long id){
         if(filmRepository.existsById(id)){
             filmRepository.deleteById(id);

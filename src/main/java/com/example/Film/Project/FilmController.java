@@ -30,6 +30,11 @@ public class FilmController {
         return filmService.getFilm(id);
     }
 
+    @GetMapping("/movies/")
+    public List<Film> getFilmByGenre(@RequestParam(required = true) String genre){
+        return filmService.getFilmByGenre(genre);
+    }
+
     //CREATE data
     @PostMapping("/addMovie")
     public ResponseEntity<Film> addFilm(@RequestBody Film film){
@@ -43,9 +48,9 @@ public class FilmController {
         filmService.deleteFilm(id);
     }
 
-        //UPDATE data
-        @PutMapping("/{filmId}")
-        public void updateFilm(@PathVariable("filmId") Long id, @RequestParam(required = false) String title, @RequestParam(required = false) String image, @RequestParam(required = false) Integer duration){
-            filmService.updateFilm(id, title, image, duration);
-        }
+    //UPDATE data
+    @PutMapping("/{filmId}")
+    public void updateFilm(@PathVariable("filmId") Long id, @RequestParam(required = false) String title, @RequestParam(required = false) String image, @RequestParam(required = false) Integer duration, @RequestParam(required = false) String genre, @RequestParam(required = false) String description){
+        filmService.updateFilm(id, title, image, duration, genre, description);
+    }
 }
