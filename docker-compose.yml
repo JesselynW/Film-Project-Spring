@@ -10,12 +10,14 @@ services:
     depends_on:
       - db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/film
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/film
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=12345
   db:
-    image: film-project
+    image: postgres:latest
     environment:
       - POSTGRES_DB=film
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=12345
+    ports:
+      - "5432:5432"

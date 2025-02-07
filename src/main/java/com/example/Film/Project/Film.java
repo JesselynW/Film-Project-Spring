@@ -1,21 +1,25 @@
 package com.example.Film.Project;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import org.springframework.data.annotation.Id;  // Untuk R2DBC
+import org.springframework.data.relational.core.mapping.Table;
 
 @Entity
+//@Builder
 @Table (name = "film")
 public class Film {
     @Id
-    @SequenceGenerator(
-            name = "film_sequence",
-            sequenceName = "film_sequence",
-            //increament at 1
-            allocationSize = 1
-    )
-    @GeneratedValue(
-            strategy = GenerationType.SEQUENCE,
-            generator = "film_sequence"
-    )
+//    @SequenceGenerator(
+//            name = "film_sequence",
+//            sequenceName = "film_sequence",
+//            //increament at 1
+//            allocationSize = 1
+//    )
+//    @GeneratedValue(
+//            strategy = GenerationType.SEQUENCE,
+//            generator = "film_sequence"
+//    )
     private Long id;
 
     @Column(name = "title")
@@ -30,6 +34,27 @@ public class Film {
     private String genre;
     @Column(name = "description")
     private String description;
+
+    public Film(String title, String image, int rating, int duration, String genre, String description) {
+        this.title = title;
+        this.image = image;
+        this.rating = rating;
+        this.duration = duration;
+        this.genre = genre;
+        this.description = description;
+    }
+
+    public Film(){}
+
+    public Film(Long id, String title, String image, int rating, int duration, String genre, String description) {
+        this.id = id;
+        this.title = title;
+        this.image = image;
+        this.rating = rating;
+        this.duration = duration;
+        this.genre = genre;
+        this.description = description;
+    }
 
     public String getDescription() {
         return description;
@@ -47,15 +72,7 @@ public class Film {
         this.genre = genre;
     }
 
-    public Film(String title, String image, int rating, int duration) {
-        this.title = title;
-        this.image = image;
-        this.rating = rating;
-        this.duration = duration;
-    }
 
-    public Film() {
-    }
 
     public Long getId() {
         return id;
